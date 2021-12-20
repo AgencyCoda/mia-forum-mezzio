@@ -2,6 +2,8 @@
 
 namespace Mia\Forum\Handler\Comment;
 
+use Mia\Core\Exception\MiaException;
+
 /**
  * Description of FetchHandler
  * 
@@ -42,7 +44,7 @@ class FetchHandler extends \Mia\Auth\Request\MiaAuthRequestHandler
         $item = \Mia\Forum\Model\MiaForumComment::find($itemId);
         // verificar si existe
         if($item === null){
-            return \App\Factory\ErrorFactory::notExist();
+            throw new MiaException('not exist');
         }
         // Devolvemos respuesta
         return new \Mia\Core\Diactoros\MiaJsonResponse($item->toArray());

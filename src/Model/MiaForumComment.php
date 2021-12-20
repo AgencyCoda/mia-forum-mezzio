@@ -72,6 +72,8 @@ class MiaForumComment extends \Illuminate\Database\Eloquent\Model
     protected $table = 'mia_forum_comment';
     
     //protected $casts = ['data' => 'array'];
+
+    protected $fillable = ['user_id', 'forum_id'];
     /**
      * Indicates if the model should be timestamped.
      *

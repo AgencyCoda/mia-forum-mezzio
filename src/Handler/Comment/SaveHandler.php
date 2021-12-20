@@ -41,15 +41,16 @@ class SaveHandler extends \Mia\Auth\Request\MiaAuthRequestHandler
         // Obtener item a procesar
         $item = $this->getForEdit($request);
         // Guardamos data
-        $item->forum_id = intval($this->getParam($request, 'forum_id', ''));
-        $item->user_id = intval($this->getParam($request, 'user_id', ''));
+        $item->forum_id = $this->getParam($request, 'forum_id', 0);
         $item->comment = $this->getParam($request, 'comment', '');
         $item->favorites = intval($this->getParam($request, 'favorites', ''));
-        $item->status = intval($this->getParam($request, 'status', ''));
-                
+        $item->status = $this->getParam($request, 'status', 0);
         
         try {
             $item->save();
+
+            $item->forum->comments++;
+            $item->forum->save();
         } catch (\Exception $exc) {
             return new \Mia\Core\Diactoros\MiaJsonErrorResponse(-2, $exc->getMessage());
         }
@@ -65,13 +66,16 @@ class SaveHandler extends \Mia\Auth\Request\MiaAuthRequestHandler
      */
     protected function getForEdit(\Psr\Http\Message\ServerRequestInterface $request)
     {
+        $user = $this->getUser($request);
         // Obtenemos ID si fue enviado
         $itemId = $this->getParam($request, 'id', '');
         // Buscar si existe el item en la DB
-        $item = \Mia\Forum\Model\MiaForumComment::find($itemId);
+        $item = \Mia\Forum\Model\MiaForumComment::where('id', $itemId)->where('user_id', $user->id)->first();
         // verificar si existe
         if($item === null){
-            return new \Mia\Forum\Model\MiaForumComment();
+            return new \Mia\Forum\Model\MiaForumComment([
+                'user_id' => $user->id
+            ]);
         }
         // Devolvemos item para editar
         return $item;
