@@ -3,6 +3,7 @@
 namespace Mia\Forum\Model;
 
 use Mia\Auth\Model\MIAUser;
+use Mia\Category\Model\MiaCategory;
 
 /**
  * Description of Model
@@ -89,7 +90,7 @@ class MiaForum extends \Illuminate\Database\Eloquent\Model
 {
     protected $table = 'mia_forum';
     
-    //protected $casts = ['data' => 'array'];
+    protected $casts = ['data' => 'array'];
     /**
      * Indicates if the model should be timestamped.
      *
@@ -104,6 +105,14 @@ class MiaForum extends \Illuminate\Database\Eloquent\Model
     public function user()
     {
         return $this->belongsTo(MIAUser::class, 'user_id');
+    }
+    /**
+    * 
+    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+    */
+    public function category()
+    {
+        return $this->belongsTo(MiaCategory::class, 'category_id');
     }
 
 

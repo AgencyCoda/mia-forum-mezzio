@@ -2,6 +2,8 @@
 
 namespace Mia\Forum\Handler;
 
+use Mia\Core\Exception\MiaException;
+
 /**
  * Description of RemoveHandler
  * 
@@ -42,7 +44,7 @@ class RemoveHandler extends \Mia\Auth\Request\MiaAuthRequestHandler
         $item = \Mia\Forum\Model\MiaForum::find($itemId);
         // verificar si existe
         if($item === null){
-            return \App\Factory\ErrorFactory::notExist();
+            throw new MiaException('not exist');
         }
         $item->deleted = 1;
         $item->save();

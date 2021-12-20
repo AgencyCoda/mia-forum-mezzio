@@ -49,7 +49,12 @@ class SaveHandler extends \Mia\Auth\Request\MiaAuthRequestHandler
         $item->comments = intval($this->getParam($request, 'comments', ''));
         $item->type = intval($this->getParam($request, 'type', ''));
         $item->item_id = intval($this->getParam($request, 'item_id', ''));
-                
+        $item->data = $this->getParam($request, 'data', []);
+
+        $categoryId = $this->getParam($request, 'category_id', 0);
+        if($categoryId > 0){
+            $item->category_id = $categoryId;
+        }
         
         try {
             $item->save();
