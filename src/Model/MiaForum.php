@@ -91,6 +91,8 @@ class MiaForum extends \Illuminate\Database\Eloquent\Model
     protected $table = 'mia_forum';
     
     protected $casts = ['data' => 'array'];
+
+    protected $fillable = ['user_id'];
     /**
      * Indicates if the model should be timestamped.
      *

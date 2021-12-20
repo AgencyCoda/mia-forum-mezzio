@@ -41,7 +41,6 @@ class SaveHandler extends \Mia\Auth\Request\MiaAuthRequestHandler
         // Obtener item a procesar
         $item = $this->getForEdit($request);
         // Guardamos data
-        $item->user_id = intval($this->getParam($request, 'user_id', ''));
         $item->title = $this->getParam($request, 'title', '');
         $item->slug = $this->getParam($request, 'slug', '');
         $item->content = $this->getParam($request, 'content', '');
@@ -73,13 +72,16 @@ class SaveHandler extends \Mia\Auth\Request\MiaAuthRequestHandler
      */
     protected function getForEdit(\Psr\Http\Message\ServerRequestInterface $request)
     {
+        $user = $this->getUser($request);
         // Obtenemos ID si fue enviado
         $itemId = $this->getParam($request, 'id', '');
         // Buscar si existe el item en la DB
-        $item = \Mia\Forum\Model\MiaForum::find($itemId);
+        $item = \Mia\Forum\Model\MiaForum::where('id', $itemId)->where('user_id', $user->id)->first();
         // verificar si existe
         if($item === null){
-            return new \Mia\Forum\Model\MiaForum();
+            return new \Mia\Forum\Model\MiaForum([
+                'user_id' => $user->id
+            ]);
         }
         // Devolvemos item para editar
         return $item;
