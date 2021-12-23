@@ -46,6 +46,7 @@ class SaveHandler extends \Mia\Auth\Request\MiaAuthRequestHandler
         $item->content = $this->getParam($request, 'content', '');
         $item->favorites = intval($this->getParam($request, 'favorites', ''));
         $item->type = intval($this->getParam($request, 'type', ''));
+        $item->published = intval($this->getParam($request, 'published', '0'));
         $item->item_id = intval($this->getParam($request, 'item_id', ''));
         $item->data = $this->getParam($request, 'data', []);
 
