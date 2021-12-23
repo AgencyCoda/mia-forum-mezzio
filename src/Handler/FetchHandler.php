@@ -46,6 +46,8 @@ class FetchHandler extends \Mia\Auth\Request\MiaAuthRequestHandler
         if($item === null){
             throw new MiaException('not exist');
         }
+        $item->views++;
+        $item->save();
         // Devolvemos respuesta
         return new \Mia\Core\Diactoros\MiaJsonResponse($item->toArray());
     }
